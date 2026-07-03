@@ -8,8 +8,8 @@ import MainLayout from './components/layout/MainLayout'
 function App() {
   return (
     <Routes>
-      <Route path='/' element={<MainLayout />}>
-        <Route index element={<DashboardPage />} />
+      <Route element={<MainLayout />}>
+        <Route path='/' element={<DashboardPage />} />
         <Route path='/citizens' element={<CitizensPage />} />
         <Route path='/citizens/:id' element={<CitizenDetailsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

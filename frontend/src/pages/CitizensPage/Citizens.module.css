@@ -1,0 +1,198 @@
+.citizensPage {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.citizensHeader,
+.filters,
+.tableSection {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+}
+
+.citizensHeader {
+    display: flex;
+    flex-direction: column;
+    padding: 28px;
+    gap: 12px;
+}
+
+.citizensHeader h2 {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.citizensHeader p {
+    max-width: 620px;
+    font-size: 16px;
+}
+
+.counters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.counters span {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface-muted);
+    color: var(--color-text);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.filters {
+    padding: 24px;
+}
+
+.filters h3 {
+    margin-bottom: 16px;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.searchInput,
+.fieldControl {
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-text);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-weight: 500;
+    font-size: 15px;  
+}
+
+.searchInput {
+    padding: 0 14px;
+    margin-bottom: 16px;
+}
+
+.fieldControl {
+    margin-top: 8px;
+    padding: 0 12px;
+}
+
+.searchInput::placeholder,
+.fieldControl::placeholder {
+    color: var(--color-text-muted);
+}
+
+.searchInput:focus,
+.fieldControl:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-soft);
+    outline: none;
+}
+
+.filtersGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.filterField {
+    color: var(--color-text);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.filtersActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.primaryButton,
+.secondaryButton {
+    min-height: 42px;
+    padding: 0 13px;
+    font-size: 14px;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.primaryButton {
+    border: 1px solid var(--color-primary);
+    background: var(--color-primary);
+    color: #ffffff;
+}
+
+.primaryButton:hover {
+    border-color: var(--color-primary-hover);
+    background: var(--color-primary-hover);
+}
+
+.secondaryButton {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+}
+
+.secondaryButton:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.tableSection {
+    padding: 24px;
+    overflow: hidden;
+}
+
+.tableSection h2 {
+    margin-bottom: 14px;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+@media (max-width: 900px) {
+    .filtersGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 620px) {
+    .citizensHeader,
+    .filters,
+    .tableSection {
+        padding: 18px;
+    }
+
+    .citizensHeader h2 {
+        font-size: 26px;
+    }
+
+    .filtersGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .filtersActions {
+        flex-direction: column-reverse;
+    }
+
+    .primaryButton,
+    .secondaryButton {
+        width: 100%;
+    }
+}
+
+select.fieldControl {
+    appearance: none;
+    padding-right: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 7.5L10 12.5L15 7.5' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+}
