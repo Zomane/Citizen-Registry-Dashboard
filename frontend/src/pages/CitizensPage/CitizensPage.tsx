@@ -78,7 +78,7 @@ export default function CitizensPage(){
 
     if (isError) {
         return (
-        <ErrorState errorTitle="Не удалось загрузить картотеку" errorMessage={error instanceof Error ? error.message : 'Ошибка сервера'}/>
+            <ErrorState errorTitle="Не удалось загрузить картотеку" errorMessage={error instanceof Error ? error.message : 'Ошибка сервера'}/>
         )
     }
 

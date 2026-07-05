@@ -1,120 +1,93 @@
-import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type SortingState } from '@tanstack/react-table'
-import type { CitizenStatus, Gender, Citizen } from '../../types/citizenType'
-import styles from './CitizensTable.module.css'
-import formatDate from '../../utils/ruDate'
+import { flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type SortingState } from "@tanstack/react-table"
+import type { DocumentVerificationStatus, CitizenDocument } from "../../types/citizenType"
+import { useMemo, useState } from "react"
+import styles from './CitizenDocuments.module.css'
+import EmptyState from "../ui/EmptyState"
+import formatDate from "../../utils/ruDate"
 
 type Props = {
-    citizens: Citizen[]
+    documents: CitizenDocument[]
 }
 
-const statusLabels: Record<CitizenStatus, string> = {
-    active: 'Активен',
+const tablePaginationSizes = [10, 25, 50, 100]
+
+const documentStatus: Record<DocumentVerificationStatus, string> = {
+    verified: 'Проверен',
     pending: 'На проверке',
-    archived: 'Архив',
+    rejected: 'Отклонен'
 }
 
-const genderLabels: Record<Gender, string> = {
-    male: 'Мужской',
-    female: 'Женский',
-}
-
-const tablePageSizes = [10, 25, 50, 100]
-
-function getAge(birthDate: string){
-    const today = new Date()
-    const birth = new Date(birthDate)
-
-    let age = today.getFullYear() - birth.getFullYear()
-    const monthDiff = today.getMonth() - birth.getMonth()
-
-    if(monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-        age -=1
-    }
-
-    return age
-}
-
-export default function CitizensTable({citizens}: Props) {
+export default function CitizenDocuments({documents} : Props){
     const [sorting, setSorting] = useState<SortingState>([])
     const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 10
     })
 
-    const columns = useMemo<ColumnDef<Citizen>[]>(
+    const columns = useMemo<ColumnDef<CitizenDocument>[]>(
         () => [
             {
-                accessorKey: 'fullName',
-                header: 'ФИО'
+                accessorKey: 'type',
+                header: 'Тип документа'
             },
             {
-                id: 'age',
-                header: 'Возраст',
-                accessorFn: (citizen) => getAge(citizen.birthDate),
-                cell: ({getValue}) => `${getValue<number>()} лет`
+                accessorKey: 'series',
+                header: 'Серия',
+                cell: ({row}) => row.original.series? row.original.series : '-'
             },
             {
-                accessorKey: 'gender',
-                header: 'Пол',
-                cell: ({row}) => genderLabels[row.original.gender]
+                accessorKey: 'number',
+                header: 'Номер'
             },
             {
-                accessorKey: 'city',
-                header: 'Город'
+                accessorKey: 'issuedAt',
+                header: 'Дата выдачи',
+                cell: ({row}) => row.original.issuedAt ? formatDate(row.original.issuedAt) : '-'
             },
             {
-                accessorKey: 'socialCategory',
-                header: 'Социальная категория'
+                accessorKey: 'issuedBy',
+                header: 'Кем выдан',
+                cell: ({row}) => row.original.issuedBy ? row.original.issuedBy : '-'
             },
             {
-                accessorKey: 'status',
+                accessorKey: 'verificationStatus',
                 header: 'Статус',
                 cell: ({row}) => (
-                    <span className={`${styles.statusBadge} ${styles[row.original.status]}`}>
-                        {statusLabels[row.original.status]}
+                    <span>
+                        {documentStatus[row.original.verificationStatus]}
                     </span>
-                )
-            },
-            {
-                accessorKey: 'registrationDate',
-                header: 'Дата учета',
-                cell: ({row}) => formatDate(row.original.registrationDate)
-            },
-            {
-                id: 'actions',
-                header: '',
-                enableSorting: false,
-                cell: ({row}) => (
-                    <Link className={styles.detailsLink} to={`/citizens/${row.original.id}`}>
-                        Подробнее
-                    </Link>
-                )
+                )    
             }
         ], []
     )
+
     const table = useReactTable({
-        data: citizens,
+        data: documents,
         columns,
         state: {
             sorting,
             pagination
         },
-
         onSortingChange: setSorting,
         onPaginationChange: setPagination,
-        getCoreRowModel: getCoreRowModel(),
+
+        getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        getPaginationRowModel: getPaginationRowModel()
+        getCoreRowModel: getCoreRowModel()
     })
+
+    if(documents.length === 0){
+        return (
+            <EmptyState title='Документы не добавлены'/>
+        )
+    }
 
     return (
         <div>
             <div className={styles.tableWrapper}>
                 <table className={styles.table}>
                     <thead>
-                        {table.getHeaderGroups().map((headerGroup)=>(
+                        {table.getHeaderGroups().map(headerGroup => (
                             <tr key={headerGroup.id}>
                                 {headerGroup.headers.map((header)=> {
                                     const sortDirection = header.column.getIsSorted()
@@ -139,9 +112,9 @@ export default function CitizensTable({citizens}: Props) {
                         ))}
                     </thead>
                     <tbody>
-                        {table.getRowModel().rows.map((row) => (
-                            <tr key={row.original.id}>
-                                {row.getVisibleCells().map((cell) => (
+                        {table.getRowModel().rows.map(row => (
+                            <tr key={row.id}>
+                                {row.getVisibleCells().map(cell => (
                                     <td key={cell.id}>
                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                     </td>
@@ -154,7 +127,7 @@ export default function CitizensTable({citizens}: Props) {
             <div className={styles.pagination}>
                 <label className={styles.pageSizeLabel}>Показывать:
                     <select className={styles.pageSizeSelect} value={table.getState().pagination.pageSize} onChange={(e) => table.setPageSize(Number(e.target.value))}>
-                        {tablePageSizes.map((pageSize) => (
+                        {tablePaginationSizes.map((pageSize) => (
                             <option key={pageSize} value={pageSize}>{pageSize}</option>
                         ))}
                     </select>

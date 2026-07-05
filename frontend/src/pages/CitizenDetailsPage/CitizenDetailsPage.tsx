@@ -3,13 +3,14 @@ import useCitizenById from '../../hooks/useCitizenById'
 import styles from './CitizenDetails.module.css'
 import ErrorState from '../../components/ui/ErrorState'
 import Loader from '../../components/ui/Loader'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type MouseEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import type { Citizen, UpdateCitizenDto } from '../../types/citizenType'
 import useUpdateCitizen from '../../hooks/useUpdateCitizen'
-import profileMalePicture from '../../assets/profile-male-picture.png'
-import ProfileFemalePicture from '../../assets/profile-female-picture.png'
 import CitizenDetailsForm from '../../components/citizens/CitizenDetailsForm'
+import CitizenDocuments from '../../components/citizens/CitizenDocuments'
+import CitizenFamily from '../../components/citizens/CitizenFamily'
+import CitizenEducationEmployment from '../../components/citizens/CitizenEducationEmployment'
 
 function getDefaultValues(citizen: Citizen): UpdateCitizenDto {
     return {
@@ -23,17 +24,17 @@ function getDefaultValues(citizen: Citizen): UpdateCitizenDto {
         socialCategory: citizen.socialCategory,
         status: citizen.status,
         snils: citizen.snils,
-        inn: citizen.inn,
+        inn: citizen.inn
     }
 }
 
 export default function CitizenDetailsPage(){
     const [isEditing, setIsEditing] = useState<boolean>(false)
     const {id} = useParams()
+    const [activeTab, setActiveTab] = useState<'mainInfo' | 'documents' | 'family' | 'employment'>('mainInfo')
 
     const updateMutation = useUpdateCitizen(id ?? '')
     const {data: citizen, isError, error, isLoading} = useCitizenById(id ?? '')
-
     const {register, handleSubmit, reset, formState: {errors}} = useForm<UpdateCitizenDto>()
 
     useEffect(() => {
@@ -57,6 +58,10 @@ export default function CitizenDetailsPage(){
         })
     }
 
+    function onEditing(e: MouseEvent<HTMLButtonElement>){
+        e.preventDefault()
+        setIsEditing(true)
+    }
 
     if (!id) {
         return <ErrorState errorTitle="Некорректный адрес" errorMessage="ID гражданина не указан" />
@@ -78,25 +83,48 @@ export default function CitizenDetailsPage(){
         )
     }
 
+    const statusLabel = citizen.status === 'active' ? 'Активен' : citizen.status === 'archived' ? 'Архив' : 'На проверке'
+
     return (
-        <div>
-            <Link to='/citizens'>← Вернуться в картотеку</Link>
-            <div className={styles.generalCitizenInfo}>
-                <img src={citizen.gender === 'male' ? profileMalePicture : ProfileFemalePicture} width={200} height={200} alt='Изображение профиля'/>
-                <h1>{citizen.fullName}</h1>
-                <p>{citizen.birthDate} · {citizen.city} · {citizen.status === 'active' ? 'Активен' : citizen.status ==='archived' ? 'Архив' : 'На проверке'}</p>
-                <CitizenDetailsForm
-                    citizen={citizen}
-                    isEditing={isEditing}
-                    isPending={updateMutation.isPending}
-                    errorMessage={updateMutation.isError ? (updateMutation.error instanceof Error ? updateMutation.error.message : 'Не удалось сохранить изменения') : undefined}
-                    errors={errors}
-                    register={register}
-                    onSubmit={handleSubmit(onSubmit)}
-                    onCancelEditing={cancelEditing}
-                    onStartEditing={() => setIsEditing(true)}
-                />
-            </div>
+        <div className={styles.detailsPage}>
+            <Link className={styles.backLink} to='/citizens'>← Вернуться в картотеку</Link>
+            <section className={styles.generalCitizenInfo}>
+                <div className={styles.detailsHeader}>
+                    <div>
+                        <span className={styles.headerLabel}>Карточка гражданина</span>
+                        <h1>{citizen.fullName}</h1>
+                        <p>{citizen.birthDate} · {citizen.city} · {statusLabel}</p>
+                    </div>
+                </div>
+                <div className={styles.tabs}>
+                    <button className={activeTab === 'mainInfo' ? styles.activeTab : styles.tabButton} type='button' onClick={() => setActiveTab('mainInfo')}>Основная информация</button>
+                    <button className={activeTab === 'documents' ? styles.activeTab : styles.tabButton} type='button' onClick={() => setActiveTab('documents')}>Документы</button>
+                    <button className={activeTab === 'family' ? styles.activeTab : styles.tabButton} type='button' onClick={() => setActiveTab('family')}>Семья</button>
+                    <button className={activeTab === 'employment' ? styles.activeTab : styles.tabButton} type='button' onClick={() => setActiveTab('employment')}>Образование и занятость</button>
+                </div>
+
+                <div className={styles.tabContent}>
+                {activeTab==='mainInfo' ? (
+                    <CitizenDetailsForm
+                        citizen={citizen}
+                        isEditing={isEditing}
+                        isPending={updateMutation.isPending}
+                        errorMessage={updateMutation.isError ? (updateMutation.error instanceof Error ? updateMutation.error.message : 'Не удалось сохранить изменения') : undefined}
+                        errors={errors}
+                        register={register}
+                        onSubmit={handleSubmit(onSubmit)}
+                        onCancelEditing={cancelEditing}
+                        onStartEditing={onEditing}
+                    />
+                ) : activeTab === 'documents' ? (
+                    <CitizenDocuments documents={citizen.documents} />
+                ) : activeTab === 'family' ? (
+                    <CitizenFamily family={citizen.family} />
+                ) : (
+                    <CitizenEducationEmployment employment={citizen.employment} employmentHistory={citizen.employmentHistory} education={citizen.education} />
+                )}
+                </div>
+            </section>
         </div>
     )
 }

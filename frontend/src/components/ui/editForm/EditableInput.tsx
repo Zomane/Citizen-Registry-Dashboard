@@ -1,4 +1,5 @@
 import type { UseFormRegisterReturn } from "react-hook-form"
+import styles from './EditableInput.module.css'
 
 type EditableFieldProps = {
     label: string
@@ -12,16 +13,16 @@ type EditableFieldProps = {
 
 export default function EditableInput({ label, value, placeholder, isEditing, error, register, type}: EditableFieldProps){
     return (
-        <div>
-            <span>{label}: </span>
+        <div className={styles.field}>
+            <span className={styles.label}>{label}</span>
 
             {isEditing ? (
                 <>
-                    <input type={type} placeholder={placeholder} {...register}/>
-                    {error && <p>{error}</p>}
+                    <input className={styles.control} type={type} placeholder={placeholder} {...register}/>
+                    {error && <p className={styles.error}>{error}</p>}
                 </>
             ) : (
-                <p>{value || '-'}</p>
+                <p className={styles.value}>{value || '-'}</p>
             )}
         </div>
     )

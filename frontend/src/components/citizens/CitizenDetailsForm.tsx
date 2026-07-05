@@ -1,9 +1,11 @@
-import type { FormEventHandler } from 'react'
-import type { FieldErrors, UseFormRegister } from 'react-hook-form'
+import type { FormEventHandler, MouseEventHandler } from 'react'
+import type { FieldErrors, UseFormRegister, } from 'react-hook-form'
 import EditableInput from '../ui/editForm/EditableInput'
 import EditableSelect from '../ui/editForm/EditableSelect'
 import type { Citizen, UpdateCitizenDto } from '../../types/citizenType'
 import styles from './CitizenDetailsForm.module.css'
+import profileMalePicture from '../../assets/profile-male-picture.png'
+import ProfileFemalePicture from '../../assets/profile-female-picture.png'
 
 type Props = {
     citizen: Citizen
@@ -14,23 +16,20 @@ type Props = {
     register: UseFormRegister<UpdateCitizenDto>
     onSubmit: FormEventHandler<HTMLFormElement>
     onCancelEditing: () => void
-    onStartEditing: () => void
+    onStartEditing: MouseEventHandler<HTMLButtonElement>
 }
 
-export default function CitizenDetailsForm({
-    citizen,
-    isEditing,
-    isPending,
-    errorMessage,
-    errors,
-    register,
-    onSubmit,
-    onCancelEditing,
-    onStartEditing,
-}: Props) {
+export default function CitizenDetailsForm({ citizen, isEditing, isPending, errorMessage, errors, register, onSubmit, onCancelEditing, onStartEditing }: Props) {
     return (
-        <form onSubmit={onSubmit}>
-            <div>
+        <form className={styles.detailsForm} onSubmit={onSubmit}>
+            <div className={styles.profileCard}>
+                <img src={citizen.gender === 'male' ? profileMalePicture : ProfileFemalePicture} width={200} height={200} alt='Изображение профиля'/>
+                <div>
+                    <h2>Основная информация</h2>
+                    <p>Анкетные данные и контактная информация гражданина</p>
+                </div>
+            </div>
+            <div className={styles.formGrid}>
                 <EditableInput value={citizen.fullName} label='ФИО' isEditing={isEditing} placeholder='Введите ФИО'
                 register={register('fullName', {
                     required: 'ФИО обязательно',
@@ -105,15 +104,15 @@ export default function CitizenDetailsForm({
                 <EditableInput value={citizen.inn} label='ИНН' isEditing={isEditing} placeholder='Введите ИНН' register={register('inn')} error={errors.inn?.message}/>
             </div>
 
-            {errorMessage && <p>{errorMessage}</p>}
+            {errorMessage && <p className={styles.formError}>{errorMessage}</p>}
             {isEditing ? (
-                <div>
-                    <button type='submit' disabled={isPending}>{isPending ? 'Сохранение...' : 'Сохранить'}</button>
-                    <button type='button' onClick={onCancelEditing} disabled={isPending}>Отменить</button>
+                <div className={styles.formActions}>
+                    <button className={styles.primaryButton} type='submit' disabled={isPending}>{isPending ? 'Сохранение...' : 'Сохранить'}</button>
+                    <button className={styles.secondaryButton} type='button' onClick={onCancelEditing} disabled={isPending}>Отменить</button>
                 </div>
             ) : (
-                <div>
-                    <button type='button' onClick={onStartEditing}>Редактировать</button>
+                <div className={styles.formActions}>
+                    <button className={styles.primaryButton} type='button' onClick={onStartEditing}>Редактировать</button>
                 </div>
             )}
         </form>

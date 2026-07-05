@@ -1,4 +1,5 @@
-import type { UseFormRegisterReturn } from "react-hook-form";
+import type { UseFormRegisterReturn } from "react-hook-form"
+import styles from './EditableSelect.module.css'
 
 type Option = {
     value: string
@@ -17,19 +18,19 @@ type EditableSelectProps = {
 
 export default function EditableSelect({ label, value, displayValue, isEditing, options, error, register }: EditableSelectProps){
     return(
-        <div>
-            <span>{label}: </span>
+        <div className={styles.field}>
+            <span className={styles.label}>{label}</span>
             {isEditing ? (
                 <>
-                    <select {...register}>
+                    <select className={styles.control} {...register}>
                         {options.map((option)=>(
                             <option key={option.value} value={option.value}>{option.label}</option>
                         ))}
                     </select>
-                    {error && <p>{error}</p>}
+                    {error && <p className={styles.error}>{error}</p>}
                 </>
             ) : (
-                <p>{displayValue || value || '-'}</p>
+                <p className={styles.value}>{displayValue || value || '-'}</p>
             )}
 
         </div>

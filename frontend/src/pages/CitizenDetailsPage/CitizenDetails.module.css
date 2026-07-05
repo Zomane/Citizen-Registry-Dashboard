@@ -1,0 +1,108 @@
+.detailsPage {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.backLink {
+    width: fit-content;
+    color: var(--color-primary);
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.backLink:hover {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
+}
+
+.generalCitizenInfo {
+    padding: 28px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+}
+
+.detailsHeader {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.headerLabel {
+    display: inline-flex;
+    margin-bottom: 8px;
+    color: var(--color-text-muted);
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.detailsHeader h1 {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.detailsHeader p {
+    margin-top: 8px;
+    color: var(--color-text-muted);
+    font-size: 15px;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 6px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-muted);
+}
+
+.tabButton,
+.activeTab {
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.tabButton {
+    background: transparent;
+    color: var(--color-text-muted);
+}
+
+.tabButton:hover {
+    color: var(--color-primary);
+}
+
+.activeTab {
+    background: var(--color-surface);
+    color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.tabContent {
+    margin-top: 22px;
+}
+
+@media (max-width: 620px) {
+    .generalCitizenInfo {
+        padding: 18px;
+    }
+
+    .detailsHeader h1 {
+        font-size: 26px;
+    }
+
+    .tabButton,
+    .activeTab {
+        width: 100%;
+    }
+}
