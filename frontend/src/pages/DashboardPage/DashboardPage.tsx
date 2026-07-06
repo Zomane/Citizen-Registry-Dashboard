@@ -5,21 +5,8 @@ import ErrorState from '../../components/ui/ErrorState'
 import Loader from '../../components/ui/Loader'
 import useCitizens from '../../hooks/useCitizens'
 import type { Citizen } from '../../types/citizenType'
+import getAge from '../../utils/getAge'
 import styles from './Dashboard.module.css'
-
-function getAge(birthDate: string){
-    const today = new Date()
-    const birth = new Date(birthDate)
-
-    let age = today.getFullYear() - birth.getFullYear()
-    const monthDiff = today.getMonth() - birth.getMonth()
-
-    if(monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-        age -=1
-    }
-
-    return age
-}
 
 function getCitizensLastMonth(citizens: Citizen[]) {
   const today = new Date()
@@ -109,7 +96,7 @@ export default function DashboardPage(){
                     <DashboardCityChart citizens={citizens}/>
                 </div>
                 <div className={styles.tableCard}>
-                    <RecentCitizensTable citizens={lastAddedCitizens} getAge={getAge}/>
+                    <RecentCitizensTable citizens={lastAddedCitizens}/>
                 </div>
             </div>
 

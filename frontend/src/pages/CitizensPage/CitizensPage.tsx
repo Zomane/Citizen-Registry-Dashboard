@@ -6,12 +6,18 @@ import ErrorState from '../../components/ui/ErrorState'
 import Loader from '../../components/ui/Loader'
 import CitizensTable from '../../components/citizens/CitizensTable'
 import EmptyState from '../../components/ui/EmptyState'
+import getAge from '../../utils/getAge'
+import formatDate from '../../utils/ruDate'
 
 const initialFilters: Filters = {
     city: '',
     status: '',
     gender: '',
     socialCategory: '',
+}
+
+function formatCsvDate(date: string) {
+    return `="${formatDate(date)}"`
 }
 
 export default function CitizensPage(){
@@ -72,6 +78,43 @@ export default function CitizensPage(){
         }))
     }
 
+    function exportCsv() {
+        const headers = [
+            'ФИО',
+            'Возраст',
+            'Пол',
+            'Город',
+            'Социальная категория',
+            'Статус',
+            'Дата учета',
+        ]
+
+        const rows = filteredCitizens.map((citizen) => [
+            citizen.fullName,
+            getAge(citizen.birthDate),
+            citizen.gender === 'male' ? 'Мужской' : 'Женский',
+            citizen.city,
+            citizen.socialCategory,
+            citizen.status === 'active' ? 'Активен' : citizen.status === 'archived' ? 'Архив' : 'На проверке',
+            formatCsvDate(citizen.registrationDate),
+        ])
+
+        const csvContent = [headers, ...rows].map((row) => row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(';')).join('\n')
+
+        const blob = new Blob([`\uFEFF${csvContent}`], {
+            type: 'text/csv;charset=utf-8;',
+        })
+
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+
+        link.href = url
+        link.download = 'citizens.csv'
+        link.click()
+
+        URL.revokeObjectURL(url)
+    }
+
     if (isLoading) {
         return <Loader />
     }
@@ -120,6 +163,7 @@ export default function CitizensPage(){
                     </label>
                 </div>
                 <div className={styles.filtersActions}>
+                    <button className={styles.secondaryButton} onClick={exportCsv}>Экспортировать CSV</button>
                     <button className={styles.secondaryButton} onClick={resetFilters}>Сбросить фильтры</button>
                     <button className={styles.primaryButton} onClick={applyFilters}>Применить фильтры</button>
                 </div>

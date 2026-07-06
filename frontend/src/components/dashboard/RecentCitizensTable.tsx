@@ -4,10 +4,10 @@ import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable, type Col
 import type { CitizenStatus, Gender, Citizen } from '../../types/citizenType'
 import styles from './RecentCitizensTable.module.css'
 import formatDate from '../../utils/ruDate'
+import getAge from '../../utils/getAge'
 
 type Props = {
     citizens: Citizen[]
-    getAge: (birthDate: string) => number
 }
 
 const statusLabels: Record<CitizenStatus, string> = {
@@ -21,7 +21,7 @@ const genderLabels: Record<Gender, string> = {
     female: 'Женский',
 }
 
-export default function RecentCitizensTable({citizens, getAge}: Props) {
+export default function RecentCitizensTable({citizens}: Props) {
     const [sorting, setSorting] = useState<SortingState>([])
 
     const columns = useMemo<ColumnDef<Citizen>[]>(
@@ -73,7 +73,7 @@ export default function RecentCitizensTable({citizens, getAge}: Props) {
                     </Link>
                 )
             }
-        ], [getAge]
+        ], []
     )
     const table = useReactTable({
         data: citizens,

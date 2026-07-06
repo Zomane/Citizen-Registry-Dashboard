@@ -4,6 +4,7 @@ import { flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, 
 import type { CitizenStatus, Gender, Citizen } from '../../types/citizenType'
 import styles from './CitizensTable.module.css'
 import formatDate from '../../utils/ruDate'
+import getAge from '../../utils/getAge'
 
 type Props = {
     citizens: Citizen[]
@@ -21,20 +22,6 @@ const genderLabels: Record<Gender, string> = {
 }
 
 const tablePageSizes = [10, 25, 50, 100]
-
-function getAge(birthDate: string){
-    const today = new Date()
-    const birth = new Date(birthDate)
-
-    let age = today.getFullYear() - birth.getFullYear()
-    const monthDiff = today.getMonth() - birth.getMonth()
-
-    if(monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-        age -=1
-    }
-
-    return age
-}
 
 export default function CitizensTable({citizens}: Props) {
     const [sorting, setSorting] = useState<SortingState>([])
