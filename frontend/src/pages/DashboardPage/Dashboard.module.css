@@ -1,0 +1,85 @@
+.dashboardPage {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.dashboardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.metricsChartsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.metricsCard,
+.pieChartCard,
+.tableCard {
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+}
+
+.metricsCard h2 {
+    margin: 0 0 18px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.metricsList {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.metricItem {
+    padding: 14px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-muted);
+}
+
+.metricItem p {
+    margin: 0 0 8px;
+    color: var(--color-text-muted);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.metricItem span {
+    color: var(--color-text);
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.barChartsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+@media (max-width: 900px) {
+    .metricsChartsGrid,
+    .barChartsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .metricsCard,
+    .pieChartCard,
+    .tableCard {
+        padding: 18px;
+    }
+
+    .metricsList {
+        grid-template-columns: 1fr;
+    }
+}

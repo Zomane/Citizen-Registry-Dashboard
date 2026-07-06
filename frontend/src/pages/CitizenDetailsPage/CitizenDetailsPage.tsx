@@ -11,6 +11,7 @@ import CitizenDetailsForm from '../../components/citizens/CitizenDetailsForm'
 import CitizenDocuments from '../../components/citizens/CitizenDocuments'
 import CitizenFamily from '../../components/citizens/CitizenFamily'
 import CitizenEducationEmployment from '../../components/citizens/CitizenEducationEmployment'
+import formatDate from '../../utils/ruDate'
 
 function getDefaultValues(citizen: Citizen): UpdateCitizenDto {
     return {
@@ -93,7 +94,7 @@ export default function CitizenDetailsPage(){
                     <div>
                         <span className={styles.headerLabel}>Карточка гражданина</span>
                         <h1>{citizen.fullName}</h1>
-                        <p>{citizen.birthDate} · {citizen.city} · {statusLabel}</p>
+                        <p>{formatDate(citizen.birthDate)} · {citizen.city} · {statusLabel}</p>
                     </div>
                 </div>
                 <div className={styles.tabs}>

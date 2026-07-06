@@ -1,0 +1,79 @@
+.chartCard {
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+}
+
+.chartCard h2 {
+    margin-bottom: 16px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.chartScroll {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 6px;
+}
+
+.barChartInner {
+    min-width: 760px;
+    height: 340px;
+}
+
+.pieChartContent {
+    display: flex;
+    height: 100%;
+    min-height: 360px;
+    flex-direction: column;
+}
+
+.pieChartContent h2 {
+    margin: 0 0 16px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.pieChartWrapper {
+    height: 240px;
+}
+
+.pieLegend {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.pieLegendItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-muted);
+}
+
+.pieLegendItem span {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+    border-radius: 50%;
+}
+
+.pieLegendItem p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+@media (max-width: 560px) {
+    .pieLegend {
+        grid-template-columns: 1fr;
+    }
+}
